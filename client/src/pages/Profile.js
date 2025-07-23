@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -22,6 +22,18 @@ function Profile({ token, user, setUser }) {
     confirmPassword: ''
   });
 
+  const fetchUserStats = useCallback(async () => {
+    try {
+      const { buildUrl } = require('../utils/api');
+      const response = await axios.get(buildUrl('/users/stats'), {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUserStats(response.data);
+    } catch (error) {
+      console.error('Error fetching user stats:', error);
+    }
+  }, [token]);
+
   useEffect(() => {
     if (user) {
       setFormData({
@@ -33,19 +45,7 @@ function Profile({ token, user, setUser }) {
       });
       fetchUserStats();
     }
-  }, [user]);
-
-  const fetchUserStats = async () => {
-    try {
-      const { buildUrl } = require('../utils/api');
-      const response = await axios.get(buildUrl('/users/stats'), {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setUserStats(response.data);
-    } catch (error) {
-      console.error('Error fetching user stats:', error);
-    }
-  };
+  }, [user, fetchUserStats]);
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();

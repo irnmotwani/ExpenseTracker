@@ -5,7 +5,12 @@ const connectDB = require('./config/db');
 const app = express();
 
 // Basic middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.CLIENT_URL
+    : 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 
 // Connect to database
@@ -43,7 +48,7 @@ app.use('/api/khatabook', require('./routes/khatabookRoutes'));
 // Personal Khata Book routes
 app.use('/api/personal-khata', require('./routes/personalKhataRoutes'));
 
-const PORT = process.env.PORT || 3001; // Using a standard development port
+const PORT = process.env.PORT || 3000; // Using a standard development port
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`🔗 MongoDB connected`);

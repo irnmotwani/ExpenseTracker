@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,21 +15,7 @@ function KhataBook({ token }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  // Fetch user's groups on component mount
-  useEffect(() => {
-    if (token) {
-      fetchGroups();
-    }
-  }, [token]);
-
-  // Fetch transactions when group changes
-  useEffect(() => {
-    if (selectedGroup) {
-      fetchTransactions();
-    }
-  }, [selectedGroup]);
-
-  const fetchGroups = async () => {
+  const fetchGroups = useCallback(async () => {
     try {
       const { buildUrl, API_ENDPOINTS } = require('../utils/api');
       const response = await axios.get(buildUrl(API_ENDPOINTS.GROUPS.BASE), {
@@ -45,9 +31,9 @@ function KhataBook({ token }) {
     } catch (error) {
       setMessage('Error loading groups: ' + (error.response?.data?.message || 'Unknown error'));
     }
-  };
+  }, [token, selectedGroup]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     if (!selectedGroup) return;
     
     setLoading(true);
@@ -98,7 +84,19 @@ function KhataBook({ token }) {
       setMessage('Error loading transactions: ' + (error.response?.data?.message || 'Unknown error'));
     }
     setLoading(false);
-  };
+  }, [selectedGroup, token]);
+
+  useEffect(() => {
+    if (token) {
+      fetchGroups();
+    }
+  }, [token, fetchGroups]);
+
+  useEffect(() => {
+    if (selectedGroup) {
+      fetchTransactions();
+    }
+  }, [selectedGroup, fetchTransactions]);
 
   useEffect(() => {
     let filtered = [...transactions];

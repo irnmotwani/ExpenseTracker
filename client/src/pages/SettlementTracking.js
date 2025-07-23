@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS, buildUrl } from '../utils/api';
@@ -29,24 +29,7 @@ function SettlementTracking({ token }) {
   const [currentGroupMembers, setCurrentGroupMembers] = useState([]);
 
   // Load groups and set first group as selected on component mount
-  useEffect(() => {
-    if (token) {
-      fetchUserGroups();
-    }
-  }, [token]);
-
-  // Load balances and settlements when group changes
-  useEffect(() => {
-    if (selectedGroup) {
-      fetchGroupBalances();
-      fetchGroupSettlements();
-    }
-  }, [selectedGroup]);
-
-  /**
-   * Fetch user's groups from database
-   */
-  const fetchUserGroups = async () => {
+  const fetchUserGroups = useCallback(async () => {
     try {
       const response = await axios.get(
         buildUrl(API_ENDPOINTS.GROUPS.BASE),
@@ -64,9 +47,10 @@ function SettlementTracking({ token }) {
       console.error('Error loading groups:', error);
       setMessage('Error loading groups: ' + (error.response?.data?.message || 'Unknown error'));
     }
-  };
+  }, [token, selectedGroup]);
 
-  const fetchGroupBalances = async () => {
+  // Load balances and settlements when group changes
+  const fetchGroupBalances = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -90,9 +74,9 @@ function SettlementTracking({ token }) {
       setMessage('Error loading balances: ' + (error.response?.data?.message || 'Unknown error'));
     }
     setLoading(false);
-  };
+  }, [selectedGroup, token]);
 
-  const fetchGroupSettlements = async () => {
+  const fetchGroupSettlements = useCallback(async () => {
     try {
       const response = await axios.get(
         buildUrl(API_ENDPOINTS.SETTLEMENTS.BY_GROUP(selectedGroup)),
@@ -103,7 +87,20 @@ function SettlementTracking({ token }) {
     } catch (error) {
       console.error('Error loading settlements:', error);
     }
-  };
+  }, [selectedGroup, token]);
+
+  useEffect(() => {
+    if (token) {
+      fetchUserGroups();
+    }
+  }, [token, fetchUserGroups]);
+
+  useEffect(() => {
+    if (selectedGroup) {
+      fetchGroupBalances();
+      fetchGroupSettlements();
+    }
+  }, [selectedGroup, fetchGroupBalances, fetchGroupSettlements]);
 
   const recordSettlement = async (e) => {
     e.preventDefault();

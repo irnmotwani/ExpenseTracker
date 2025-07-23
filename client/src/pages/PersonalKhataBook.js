@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -17,20 +17,7 @@ function PersonalKhataBook({ token }) {
     address: ''
   });
 
-  useEffect(() => {
-    fetchCustomers();
-    fetchSummary();
-  }, []);
-
-  useEffect(() => {
-    if (searchTerm) {
-      fetchCustomers(searchTerm);
-    } else {
-      fetchCustomers();
-    }
-  }, [searchTerm]);
-
-  const fetchCustomers = async (search = '') => {
+  const fetchCustomers = useCallback(async (search = '') => {
     setLoading(true);
     try {
       const params = search ? `?search=${encodeURIComponent(search)}` : '';
@@ -43,9 +30,9 @@ function PersonalKhataBook({ token }) {
       setMessage('Error fetching customers: ' + (error.response?.data?.message || 'Unknown error'));
     }
     setLoading(false);
-  };
+  }, [token]);
 
-  const fetchSummary = async () => {
+  const fetchSummary = useCallback(async () => {
     try {
       const { buildUrl } = require('../utils/api');
       const response = await axios.get(buildUrl('/personal-khata/summary'), {
@@ -55,7 +42,20 @@ function PersonalKhataBook({ token }) {
     } catch (error) {
       setMessage('Error fetching summary: ' + (error.response?.data?.message || 'Unknown error'));
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchCustomers();
+    fetchSummary();
+  }, [fetchCustomers, fetchSummary]);
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchCustomers(searchTerm);
+    } else {
+      fetchCustomers();
+    }
+  }, [searchTerm, fetchCustomers]);
 
   const addCustomer = async (e) => {
     e.preventDefault();

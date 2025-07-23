@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -11,17 +11,7 @@ function Analytics({ token }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  useEffect(() => {
-    if (selectedGroupId) {
-      fetchAnalytics();
-    }
-  }, [selectedGroupId]);
-
-  const fetchGroups = async () => {
+  const fetchGroups = useCallback(async () => {
     try {
       const { buildUrl, API_ENDPOINTS } = require('../utils/api');
       const response = await axios.get(buildUrl(API_ENDPOINTS.GROUPS.BASE), {
@@ -31,9 +21,9 @@ function Analytics({ token }) {
     } catch (error) {
       setMessage('Error fetching groups: ' + (error.response?.data?.message || 'Unknown error'));
     }
-  };
+  }, [token]);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     if (!selectedGroupId) return;
     
     setLoading(true);
@@ -47,7 +37,17 @@ function Analytics({ token }) {
       setMessage('Error fetching analytics: ' + (error.response?.data?.message || 'Unknown error'));
     }
     setLoading(false);
-  };
+  }, [selectedGroupId, token]);
+
+  useEffect(() => {
+    fetchGroups();
+  }, [fetchGroups]);
+
+  useEffect(() => {
+    if (selectedGroupId) {
+      fetchAnalytics();
+    }
+  }, [selectedGroupId, fetchAnalytics]);
 
   const handleGroupChange = (groupId) => {
     setSelectedGroupId(groupId);

@@ -6,10 +6,8 @@ const connectDB = async () => {
     // Use environment variable if available, otherwise use local MongoDB
     const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/expenseflow';
     
-    await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    // Connect without deprecated options
+    await mongoose.connect(mongoURI);
     
     console.log('✅ MongoDB connected:', mongoURI);
   } catch (err) {

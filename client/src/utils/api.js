@@ -3,7 +3,8 @@
  * Centralized configuration for all API endpoints used in the application
  */
 
-const BASE_URL = 'http://localhost:3001/api';
+// Use environment variable in production or fallback to localhost in development
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 export const API_ENDPOINTS = {
   // Authentication endpoints

@@ -1,5 +1,5 @@
 // Import required React modules and components
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 // Import page components
@@ -41,14 +41,8 @@ function App() {
     // }
   }, []); // Run only once on app start
 
-  useEffect(() => {
-    if (token) {
-      // Fetch user data from API
-      fetchUserData();
-    }
-  }, [token]);
-
-  const fetchUserData = async () => {
+  // Memoize fetchUserData to avoid unnecessary re-creations
+  const fetchUserData = useCallback(async () => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       const response = await fetch(`${apiUrl}/api/test/current-user`, {
@@ -63,7 +57,14 @@ function App() {
       // Fallback user data
       setUser({ username: 'User', email: 'user@example.com' });
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      // Fetch user data from API
+      fetchUserData();
+    }
+  }, [token, fetchUserData]);
 
   const logout = () => {
     setToken('');

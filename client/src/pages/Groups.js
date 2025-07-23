@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -20,11 +20,7 @@ function Groups({ token }) {
     email: ''
   });
 
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  const fetchGroups = async () => {
+  const fetchGroups = useCallback(async () => {
     setLoading(true);
     try {
       const { buildUrl, API_ENDPOINTS } = require('../utils/api');
@@ -36,7 +32,11 @@ function Groups({ token }) {
       setMessage('Error fetching groups: ' + (error.response?.data?.message || 'Unknown error'));
     }
     setLoading(false);
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchGroups();
+  }, [fetchGroups]);
 
   const createGroup = async (e) => {
     e.preventDefault();

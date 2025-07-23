@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
@@ -19,25 +19,11 @@ function Expenses({ token }) {
     category: 'Food'
   });
 
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  useEffect(() => {
-    if (selectedGroupId) {
-      fetchExpenses();
-    }
-  }, [selectedGroupId]);
-
-  const fetchGroups = async () => {
+  const fetchGroups = useCallback(async () => {
     try {
-      // Import API utilities
       const { buildUrl, API_ENDPOINTS } = require('../utils/api');
-      
-      // Log the URL being used
       const url = buildUrl(API_ENDPOINTS.GROUPS.BASE);
       console.log('Fetching groups from URL:', url);
-      
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -47,11 +33,10 @@ function Expenses({ token }) {
       console.error('Error details:', error);
       setMessage('Error fetching groups: ' + (error.response?.data?.message || 'Unknown error'));
     }
-  };
+  }, [token]);
 
-  const fetchExpenses = async () => {
+  const fetchExpenses = useCallback(async () => {
     if (!selectedGroupId) return;
-
     setLoading(true);
     try {
       const { buildUrl, API_ENDPOINTS } = require('../utils/api');
@@ -63,7 +48,17 @@ function Expenses({ token }) {
       setMessage('Error fetching expenses: ' + (error.response?.data?.message || 'Unknown error'));
     }
     setLoading(false);
-  };
+  }, [selectedGroupId, token]);
+
+  useEffect(() => {
+    fetchGroups();
+  }, [fetchGroups]);
+
+  useEffect(() => {
+    if (selectedGroupId) {
+      fetchExpenses();
+    }
+  }, [selectedGroupId, fetchExpenses]);
 
   const createExpense = async (e) => {
     e.preventDefault();

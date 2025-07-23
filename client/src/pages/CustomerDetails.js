@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -31,29 +31,28 @@ function CustomerDetails({ token }) {
         date: new Date().toISOString().split('T')[0] // Today's date
     });
 
-    // Load customer data and transactions on component mount
-    useEffect(() => {
-        fetchCustomerDetails();
-    }, [customerId]);
-
     /**
      * Fetch customer details and transaction history
      */
-    const fetchCustomerDetails = async () => {
+    const fetchCustomerDetails = useCallback(async () => {
         setLoading(true);
         try {
             const response = await axios.get(
                 `${require('../utils/api').buildUrl(`/personal-khata/customers/${customerId}/transactions`)}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-
             setCustomer(response.data.customer);
             setTransactions(response.data.transactions);
         } catch (error) {
             setMessage('Error loading customer details: ' + (error.response?.data?.message || 'Unknown error'));
         }
         setLoading(false);
-    };
+    }, [customerId, token]);
+
+    // Load customer data and transactions on component mount
+    useEffect(() => {
+        fetchCustomerDetails();
+    }, [customerId, fetchCustomerDetails]);
 
     /**
      * Add new transaction
