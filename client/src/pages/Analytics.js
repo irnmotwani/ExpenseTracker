@@ -65,15 +65,7 @@ function Analytics({ token }) {
     marginBottom: '10px'
   };
 
-  const buttonStyle = {
-    padding: '10px 20px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '14px'
-  };
+
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>

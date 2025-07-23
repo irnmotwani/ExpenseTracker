@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { openChatbot } from '../utils/chatbot';
 
 function HelpSupport() {
   const navigate = useNavigate();
@@ -64,32 +65,6 @@ function HelpSupport() {
     ]
   };
 
-  const contactMethods = [
-    {
-      icon: "📱",
-      title: "Phone Support",
-      description: "Call us for immediate assistance",
-      contact: "+91 7000270580",
-      action: "tel:+917000270580",
-      color: "#3498db"
-    },
-    {
-      icon: "✉️",
-      title: "Email Support",
-      description: "Send us your queries via email",
-      contact: "irnmotwanii@gmail.com",
-      action: "mailto:irnmotwanii@gmail.com",
-      color: "#e74c3c"
-    },
-    {
-      icon: "💬",
-      title: "Live Chat",
-      description: "Chat with our support team",
-      contact: "Available 24/7",
-      action: "#",
-      color: "#27ae60"
-    }
-  ];
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
@@ -125,7 +100,7 @@ function HelpSupport() {
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-        
+
         {/* Quick Contact Cards */}
         <div style={{
           display: 'grid',
@@ -133,13 +108,25 @@ function HelpSupport() {
           gap: '20px',
           marginBottom: '40px'
         }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            padding: '25px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            borderLeft: '4px solid #3498db'
-          }}>
+          <div 
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '10px',
+              padding: '25px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              borderLeft: '4px solid #3498db',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(52, 152, 219, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
               <div style={{ fontSize: '32px' }}>📱</div>
               <div>
@@ -147,12 +134,12 @@ function HelpSupport() {
                 <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>Call us for immediate assistance</p>
               </div>
             </div>
-            <a 
+            <a
               href="tel:+917000270580"
-              style={{ 
+              style={{
                 display: 'block',
-                backgroundColor: '#f8f9fa', 
-                padding: '10px', 
+                backgroundColor: '#f8f9fa',
+                padding: '10px',
                 borderRadius: '5px',
                 color: '#3498db',
                 fontWeight: 'bold',
@@ -164,13 +151,25 @@ function HelpSupport() {
             </a>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            padding: '25px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            borderLeft: '4px solid #e74c3c'
-          }}>
+          <div 
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '10px',
+              padding: '25px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              borderLeft: '4px solid #e74c3c',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(231, 76, 60, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
               <div style={{ fontSize: '32px' }}>✉️</div>
               <div>
@@ -178,12 +177,12 @@ function HelpSupport() {
                 <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>Send us your queries via email</p>
               </div>
             </div>
-            <a 
+            <a
               href="mailto:irnmotwanii@gmail.com"
-              style={{ 
+              style={{
                 display: 'block',
-                backgroundColor: '#f8f9fa', 
-                padding: '10px', 
+                backgroundColor: '#f8f9fa',
+                padding: '10px',
                 borderRadius: '5px',
                 color: '#e74c3c',
                 fontWeight: 'bold',
@@ -195,26 +194,31 @@ function HelpSupport() {
             </a>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            padding: '25px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            borderLeft: '4px solid #27ae60',
-            cursor: 'pointer',
-            transition: 'transform 0.2s'
-          }}
-          onClick={() => {
-            // Trigger chatbot to open
-            const chatBotButton = document.querySelector('[style*="position: fixed"][style*="bottom: 20px"][style*="right: 20px"]');
-            if (chatBotButton) {
-              chatBotButton.click();
-            }
-            // Show message that chatbot is opening
-            alert('💬 Opening AI Chat Assistant...\n\nLook for the chat bubble in the bottom-right corner!');
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          <div 
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '10px',
+              padding: '25px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              borderLeft: '4px solid #27ae60',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onClick={() => {
+              openChatbot();
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(39, 174, 96, 0.2)';
+              e.currentTarget.style.borderLeft = '4px solid #2ecc71';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+              e.currentTarget.style.borderLeft = '4px solid #27ae60';
+            }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
               <div style={{ fontSize: '32px' }}>💬</div>
@@ -223,9 +227,9 @@ function HelpSupport() {
                 <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>Chat with our AI support assistant</p>
               </div>
             </div>
-            <div style={{ 
-              backgroundColor: '#f8f9fa', 
-              padding: '10px', 
+            <div style={{
+              backgroundColor: '#f8f9fa',
+              padding: '10px',
               borderRadius: '5px',
               color: '#27ae60',
               fontWeight: 'bold',
@@ -288,15 +292,15 @@ function HelpSupport() {
                   borderRadius: '8px',
                   borderLeft: '4px solid #3498db'
                 }}>
-                  <h4 style={{ 
-                    margin: '0 0 15px 0', 
+                  <h4 style={{
+                    margin: '0 0 15px 0',
                     color: '#2c3e50',
                     fontSize: '16px'
                   }}>
                     Q: {faq.question}
                   </h4>
-                  <p style={{ 
-                    margin: 0, 
+                  <p style={{
+                    margin: 0,
                     color: '#555',
                     lineHeight: '1.6',
                     fontSize: '14px'
@@ -319,17 +323,17 @@ function HelpSupport() {
           boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
         }}>
           <h2 style={{ color: '#2c3e50', marginBottom: '20px' }}>🚀 Quick Start Guide</h2>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              <div style={{ 
-                backgroundColor: '#3498db', 
-                color: 'white', 
-                width: '60px', 
-                height: '60px', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                backgroundColor: '#3498db',
+                color: 'white',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 15px auto',
                 fontSize: '24px'
@@ -341,14 +345,14 @@ function HelpSupport() {
             </div>
 
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              <div style={{ 
-                backgroundColor: '#e74c3c', 
-                color: 'white', 
-                width: '60px', 
-                height: '60px', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                backgroundColor: '#e74c3c',
+                color: 'white',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 15px auto',
                 fontSize: '24px'
@@ -360,14 +364,14 @@ function HelpSupport() {
             </div>
 
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              <div style={{ 
-                backgroundColor: '#27ae60', 
-                color: 'white', 
-                width: '60px', 
-                height: '60px', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                backgroundColor: '#27ae60',
+                color: 'white',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 15px auto',
                 fontSize: '24px'
@@ -379,14 +383,14 @@ function HelpSupport() {
             </div>
 
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              <div style={{ 
-                backgroundColor: '#f39c12', 
-                color: 'white', 
-                width: '60px', 
-                height: '60px', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                backgroundColor: '#f39c12',
+                color: 'white',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 15px auto',
                 fontSize: '24px'
@@ -413,8 +417,8 @@ function HelpSupport() {
             For urgent issues or technical emergencies, contact us directly
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-            <a 
-              href="tel:+917000270580" 
+            <a
+              href="tel:+917000270580"
               style={{
                 backgroundColor: 'white',
                 color: '#e74c3c',
@@ -429,8 +433,8 @@ function HelpSupport() {
             >
               📱 Call Now: +91 7000270580
             </a>
-            <a 
-              href="mailto:irnmotwanii@gmail.com" 
+            <a
+              href="mailto:irnmotwanii@gmail.com"
               style={{
                 backgroundColor: 'white',
                 color: '#e74c3c',

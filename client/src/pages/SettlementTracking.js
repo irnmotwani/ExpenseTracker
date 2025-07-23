@@ -201,7 +201,7 @@ function SettlementTracking({ token }) {
     setLoading(true);
     
     try {
-      const response = await axios.delete(
+      await axios.delete(
         buildUrl(API_ENDPOINTS.SETTLEMENTS.DELETE(settlementId)),
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -221,9 +221,7 @@ function SettlementTracking({ token }) {
     }
   };
 
-  const getBalanceColor = (amount) => {
-    return amount > 0 ? '#dc3545' : '#28a745';
-  };
+
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
