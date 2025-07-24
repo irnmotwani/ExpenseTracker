@@ -209,6 +209,31 @@ expenseflow/
 3. Set start command: `cd server && npm start`
 4. Add environment variables in Render dashboard
 
+## 🔮 Future Enhancements
+
+We are continuously working to improve ExpenseFlow. Here are some exciting features planned for future releases:
+
+### 🚀 Upcoming Features
+- **Google Authentication** - Sign in with Google for faster and more secure access
+- **Email Verification** - Enhanced security with email verification during registration
+- **Payment Reminders** - Automated notifications for users who haven't settled their dues
+- **SMS Notifications** - Text message alerts for important updates and reminders
+- **Mobile App** - Native iOS and Android applications
+- **Multi-currency Support** - Handle expenses in different currencies
+- **Receipt Upload** - Attach photos of receipts to expense entries
+- **Advanced Analytics** - More detailed spending insights and trends
+- **Export to PDF** - Generate and download expense reports
+- **Dark Mode** - Toggle between light and dark themes
+
+### 💡 Planned Improvements
+- **Real-time Notifications** - Instant updates when expenses are added or settled
+- **Offline Support** - Work without internet connection with data sync
+- **Advanced Search** - More powerful search and filtering options
+- **Bulk Operations** - Add multiple expenses at once
+- **Custom Categories** - Create personalized expense categories
+- **Budget Limits** - Set spending limits and get alerts
+- **Integration APIs** - Connect with banking and payment apps
+
 ## 🤝 Contributing
 
 1. Fork the repository
