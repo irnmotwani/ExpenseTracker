@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
+import Logo from '../components/Logo';
 
 function Dashboard({ user, logout }) {
   const navigate = useNavigate();
@@ -8,8 +9,8 @@ function Dashboard({ user, logout }) {
   return (
     <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
       <PageHeader 
-        title="ExpenseFlow"
-        icon="🏦"
+        title={<Logo size={32} showText={true} />}
+        icon=""
         user={user}
         logout={logout}
         showUserInfo={true}

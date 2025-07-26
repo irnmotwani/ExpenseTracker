@@ -1,15 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function PageHeader({ 
-  title, 
-  icon, 
-  user, 
-  logout, 
-  showBackButton = false, 
+function PageHeader({
+  title,
+  icon,
+  user,
+  logout,
+  showBackButton = false,
   backPath = '/dashboard',
   showUserInfo = false,
-  rightContent = null 
+  rightContent = null
 }) {
   const navigate = useNavigate();
 
@@ -47,21 +47,21 @@ function PageHeader({
           )}
           <h1 style={{ margin: 0, color: '#333', display: 'flex', alignItems: 'center', gap: '10px' }}>
             {icon && <span style={{ fontSize: '24px' }}>{icon}</span>}
-            {title}
+            {typeof title === 'string' ? title : <div>{title}</div>}
           </h1>
         </div>
 
         {/* Right side - User info or custom content */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
           {rightContent}
-          
+
           {showUserInfo && user && (
             <>
               <span style={{ color: '#666', fontSize: '16px' }}>
                 Welcome, {user.username || 'User'}!
               </span>
-              <button 
-                onClick={() => navigate('/profile')} 
+              <button
+                onClick={() => navigate('/profile')}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -81,8 +81,8 @@ function PageHeader({
               >
                 👤 Profile
               </button>
-              <button 
-                onClick={logout} 
+              <button
+                onClick={logout}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

@@ -89,7 +89,16 @@ function ModernLogin({ setToken, setUser }) {
           <div className="brand-content">
             {/* Logo and Brand Name */}
             <div className="logo-container">
-              <div className="logo-icon">💰</div>
+              <img 
+                src="https://i.postimg.cc/RN0cXSjS/logo.png" 
+                alt="ExpenseFlow Logo" 
+                className="logo-image"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+              <div className="logo-icon" style={{display: 'none'}}>💰</div>
               <h1 className="brand-title">ExpenseFlow</h1>
             </div>
             
@@ -360,7 +369,15 @@ function ModernLogin({ setToken, setUser }) {
           margin-bottom: 2rem;
         }
 
-        /* Logo icon styling */
+        /* Logo image styling */
+        .logo-image {
+          width: 80px;
+          height: 80px;
+          object-fit: contain;
+          filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        /* Logo icon styling (fallback) */
         .logo-icon {
           font-size: 4rem;
           filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
