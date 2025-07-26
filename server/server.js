@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const keepAlive = require('./utils/keepAlive');
 
 const app = express();
 
@@ -14,7 +15,11 @@ app.use(cors({
 app.use(express.json());
 
 // Connect to database
-connectDB();
+connectDB().then(() => {
+  // Create database indexes for better performance
+  const { createIndexes } = require('./utils/dbIndexes');
+  createIndexes();
+});
 
 // Simple test route
 app.get('/api/test/health', (req, res) => {
@@ -52,4 +57,7 @@ const PORT = process.env.PORT || 3000; // Using a standard development port
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`🔗 MongoDB connected`);
+  
+  // Start keep-alive service to prevent cold starts
+  keepAlive.start();
 });
