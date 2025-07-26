@@ -53,7 +53,7 @@ function Profile({ token, user, setUser }) {
     setMessage('');
 
     try {
-      const { buildUrl } = require('../utils/api');
+      const { buildUrl, API_ENDPOINTS } = require('../utils/api');
       const updateData = {
         username: formData.username,
         email: formData.email
@@ -70,7 +70,7 @@ function Profile({ token, user, setUser }) {
         updateData.newPassword = formData.newPassword;
       }
 
-      const response = await axios.put(buildUrl('/users/profile'), updateData, {
+      const response = await axios.put(buildUrl(API_ENDPOINTS.USERS.PROFILE), updateData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -91,18 +91,34 @@ function Profile({ token, user, setUser }) {
 
   const handleDeleteAccount = async () => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      setLoading(true);
+      setMessage('');
+      
       try {
-        const { buildUrl } = require('../utils/api');
-        await axios.delete(buildUrl('/users/profile'), {
+        const { buildUrl, API_ENDPOINTS } = require('../utils/api');
+        console.log('Attempting to delete account...');
+        
+        const response = await axios.delete(buildUrl(API_ENDPOINTS.USERS.PROFILE), {
           headers: { Authorization: `Bearer ${token}` }
         });
         
+        console.log('Delete response:', response.data);
+        
         // Clear local storage and redirect to login
         localStorage.removeItem('token');
-        setMessage('Account deleted successfully');
-        navigate('/login');
+        setMessage('✅ Account deleted successfully');
+        
+        // Wait a moment before redirecting
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+        
       } catch (error) {
-        setMessage('❌ Error deleting account: ' + (error.response?.data?.message || 'Unknown error'));
+        console.error('Delete account error:', error);
+        console.error('Error response:', error.response);
+        setMessage('❌ Error deleting account: ' + (error.response?.data?.message || error.message || 'Unknown error'));
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -450,9 +466,17 @@ function Profile({ token, user, setUser }) {
                 </p>
                 <button
                   onClick={handleDeleteAccount}
+                  disabled={loading}
                   className="btn btn-danger"
                 >
-                  Delete Account
+                  {loading ? (
+                    <>
+                      <div className="loading-spinner"></div>
+                      Deleting...
+                    </>
+                  ) : (
+                    'Delete Account'
+                  )}
                 </button>
               </div>
             </div>

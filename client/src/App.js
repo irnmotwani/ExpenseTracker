@@ -17,6 +17,7 @@ import AboutUs from './pages/AboutUs';
 import HelpSupport from './pages/HelpSupport';
 import Footer from './components/Footer';
 import ChatBot from './components/ChatBot';
+import GlobalLoader from './components/GlobalLoader';
 import './App.css';
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
 
   // User state - stores user information
   const [user, setUser] = useState(null);
+  
+  // Loading state for initial app load
+  const [isLoading, setIsLoading] = useState(false);
 
   /**
    * Effect to check for existing token in localStorage
@@ -45,9 +49,18 @@ function App() {
   const fetchUserData = useCallback(async () => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+      
+      // Add timeout for faster failure detection
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const response = await fetch(`${apiUrl}/api/test/current-user`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
+      
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
@@ -61,8 +74,11 @@ function App() {
 
   useEffect(() => {
     if (token) {
+      setIsLoading(true);
       // Fetch user data from API
-      fetchUserData();
+      fetchUserData().finally(() => {
+        setIsLoading(false);
+      });
     }
   }, [token, fetchUserData]);
 
@@ -79,6 +95,9 @@ function App() {
         display: 'flex',
         flexDirection: 'column'
       }}>
+        {/* Global Loading Overlay */}
+        {isLoading && <GlobalLoader message="Loading your data..." />}
+        
         {/* Main Content Area */}
         <div style={{ flex: 1 }}>
           {/* Conditional rendering based on authentication status */}
