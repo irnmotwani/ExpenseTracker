@@ -10,8 +10,23 @@
     <meta name="theme-color" content="#667eea" />
     <meta
       name="description"
-      content="ExpenseFlow - Smart expense tracking for modern teams"
+      content="ExpenseFlow - Smart expense tracking and management app for individuals and groups. Track expenses, split bills, manage settlements, and analyze spending patterns with ease."
     />
+    <meta name="keywords" content="expense tracker, bill splitter, expense management, group expenses, settlement tracking, expense flow, money management, budget tracker, financial app" />
+    <meta name="author" content="ExpenseFlow Team" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="ExpenseFlow - Smart Expense Tracking" />
+    <meta property="og:description" content="Track expenses, split bills, and manage group finances with ExpenseFlow. The smart way to handle money management." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://expensefloww.netlify.app/" />
+    <meta property="og:site_name" content="ExpenseFlow" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ExpenseFlow - Smart Expense Tracking" />
+    <meta name="twitter:description" content="Track expenses, split bills, and manage group finances with ExpenseFlow." />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -27,6 +42,29 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>ExpenseFlow - Smart Expense Tracking</title>
+    
+    <!-- Structured Data for Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ExpenseFlow",
+      "description": "Smart expense tracking and management app for individuals and groups",
+      "url": "https://expensefloww.netlify.app/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "ExpenseFlow Team"
+      },
+      "keywords": "expense tracker, bill splitter, expense management, group expenses, settlement tracking"
+    }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
